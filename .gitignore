@@ -1,0 +1,5 @@
+vscode.conf 
+/.pdm/
+*.o
+*.d
+/build/
