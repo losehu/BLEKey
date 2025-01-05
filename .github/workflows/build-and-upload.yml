@@ -1,0 +1,90 @@
+name: Build and Upload HEX Files
+
+on:
+  push:
+    branches:
+      - main # 替换为你的分支名称
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 检出代码
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # 缓存 arm-none-eabi-gcc 工具链
+      - name: Cache ARM GCC
+        id: cache-armgcc
+        uses: actions/cache@v3
+        with:
+          path: ./arm-gnu-toolchain-12.2.rel1
+          key: arm-gnu-toolchain-12.2.rel1
+
+      # 下载 ARM GCC 工具链（如果缓存未命中）
+      - name: Download and Extract ARM GCC
+        if: steps.cache-armgcc.outputs.cache-hit != 'true'
+        run: |
+          wget "https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/binrel/arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi.tar.xz?rev=7bd049b7a3034e64885fa1a71c12f91d&hash=732D909FA8F68C0E1D0D17D08E057619" -O arm-gnu-toolchain.tar.xz
+          mkdir -p arm-gnu-toolchain-12.2.rel1
+          tar -xf arm-gnu-toolchain.tar.xz -C arm-gnu-toolchain-12.2.rel1 --strip-components=1
+          rm arm-gnu-toolchain.tar.xz
+
+      # 添加 arm-none-eabi-gcc 到 PATH
+      - name: Add ARM GCC to PATH
+        run: echo "$(pwd)/arm-gnu-toolchain-12.2.rel1/bin" >> $GITHUB_PATH
+
+      # 缓存 Gecko SDK
+      - name: Cache Gecko SDK
+        id: cache-gecko
+        uses: actions/cache@v3
+        with:
+          path: ./gecko-sdk
+          key: gecko-sdk-v2024.12.0
+          restore-keys: gecko-sdk-
+
+      # 下载并解压 Gecko SDK（如果缓存未命中）
+      - name: Download and Extract Gecko SDK
+        if: steps.cache-gecko.outputs.cache-hit != 'true' 
+        run: |
+          wget https://github.com/SiliconLabs/simplicity_sdk/releases/download/v2024.12.0/gecko-sdk.zip -O gecko-sdk.zip
+          unzip -o gecko-sdk.zip -d ./gecko-sdk
+          rm gecko-sdk.zip
+
+
+      # Cache Simplicity Commander
+      - name: Cache Simplicity Commander
+        id: cache-cmd
+        uses: actions/cache@v3
+        with:
+          path: ./commander
+          key: commander-v1
+
+      # Download and extract Simplicity Commander (if cache miss)
+      - name: Download and Extract Simplicity Commander
+        if: steps.cache-cmd.outputs.cache-hit != 'true'
+        run: |
+          wget https://www.silabs.com/documents/public/software/SimplicityCommander-Linux.zip    
+          unzip ./SimplicityCommander-Linux.zip
+          rm ./SimplicityCommander-Linux.zip    
+          tar -xjf ./SimplicityCommander-Linux/Commander_linux_x86_64_1v17p0b1771.tar.bz
+          rm -rf ./SimplicityCommander-Linux
+
+      # 运行 make all
+      - name: Build Project
+        run: |
+          make all
+
+      # 上传 HEX 和 GBL 文件到构建产物
+      - name: Upload HEX and GBL Files
+        uses: actions/upload-artifact@v3
+        with:
+          name: hex-and-gbl-files
+          path: |
+            build/**/*.hex
+            build/**/*.gbl
+
+
+            
+ 

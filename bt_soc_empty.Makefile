@@ -152,6 +152,7 @@ endif
 	$(ECHO)$(OBJCOPY) $(OUTPUT_DIR)/$(PROJECTNAME).out -O binary $(OUTPUT_DIR)/$(PROJECTNAME).bin
 	$(ECHO)$(OBJCOPY) $(OUTPUT_DIR)/$(PROJECTNAME).out -O ihex $(OUTPUT_DIR)/$(PROJECTNAME).hex
 	$(ECHO)$(OBJCOPY) $(OUTPUT_DIR)/$(PROJECTNAME).out -O srec $(OUTPUT_DIR)/$(PROJECTNAME).s37
+	$(COMMANDER_PATH) postbuild $(PROJECTNAME).slpb --parameter build_dir:$(OUTPUT_DIR)
 	@echo 'Done.'
 	$(SIZE) $(OUTPUT_DIR)/$(PROJECTNAME).out
 $(OBJS):
