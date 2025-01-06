@@ -1,0 +1,6 @@
+device EFR32BG22CxxxF352
+speed 4000
+if SWD
+loadfile build/debug/bt_soc_empty.hex 0x006000
+verify build/debug/bt_soc_empty.hex 0x006000
+exit

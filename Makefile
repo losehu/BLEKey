@@ -57,9 +57,9 @@ print-config:
 	@echo "ARM_GCC_DIR: $(ARM_GCC_DIR)"
 	@echo "JLINK_PATH: $(JLINK_PATH)"
 
+
 flash:
-	$(JLINK_PATH) -device $(DEVICE) -if $(INTERFACE) -speed $(SPEED) -autoconnect 1 \
-	-Command "loadfile $(HEX_FILE) $(LOAD_ADDRESS); verify $(HEX_FILE) $(LOAD_ADDRESS); exit"
+	$(JLINK_PATH) -autoconnect 1 -CommanderScript flash.jlink
 
 %:
 	@if [ "$@" != "print-config" ]; then \

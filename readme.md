@@ -29,5 +29,6 @@
 * 手机下载simplicity-connect,[点击此处](https://www.silabs.com/developer-tools/simplicity-connect-mobile-app?tab=downloads) 
 * 连接设备后OTA升级上传.gbl文件
 
-
-
+# 调试
+#### 1.VSCODE 安装@category:debuggers cortex-debug插件
+#### 2.DEBUG使用launch.json配置文件

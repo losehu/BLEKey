@@ -1,0 +1,21 @@
+{
+    
+
+        "showDevDebugTimestamps": true,
+        "configurations": [
+        {
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/build/debug/bt_soc_empty.out",
+            "name": "Debug with JLink",
+            "request": "launch",
+            "type": "cortex-debug",
+            "device": "EFR32BG22CxxxF352",
+            "runToEntryPoint": "main",
+            "showDevDebugOutput": "none",
+            "servertype": "jlink"
+        }
+        ],
+        // "svdFile": "${workspaceRoot}/STM32F103.svd",
+        // "preLaunchTask": "build",
+        // "postDebugTask": "run"
+}
