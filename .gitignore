@@ -3,3 +3,8 @@ vscode.conf
 *.o
 *.d
 /build/
+/GNU ARM v12.2.1 - Default/
+imported_project_report.html
+/image/
+/.settings/
+/.uceditor/
